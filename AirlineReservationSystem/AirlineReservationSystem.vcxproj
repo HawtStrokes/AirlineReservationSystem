@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug_DLL_GUI|x64">
+      <Configuration>Debug_DLL_GUI</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_DLL_GUI|x64">
+      <Configuration>Release_DLL_GUI</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Ext\imgui\BuildImGui.cpp" />
+    <ClCompile Include="Source\Gui\CustomFont.h" />
+    <ClCompile Include="Source\Application.cpp" />
+    <ClCompile Include="Source\Gui\GuiApp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Core\Flight.h" />
+    <ClInclude Include="Source\Core\SeatMap.h" />
+    <ClInclude Include="Source\Gui\GuiApp.h" />
+    <ClInclude Include="Source\Util\PlatformUtil.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\CopyDLL.bat" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{57675c96-452a-48f0-bca5-70bdce8de5be}</ProjectGuid>
+    <RootNamespace>Cyberpunk2077_ControllerRemapper</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>AirlineReservationSystem</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_DLL_GUI|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DLL_GUI|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_DLL_GUI|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DLL_GUI|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_DLL_GUI|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)\Build\$(Configuration)\Output</OutDir>
+    <IntDir>$(ProjectDir)\Build\$(Configuration)\Intermediate</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DLL_GUI|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)\Build\$(Configuration)\Output</OutDir>
+    <IntDir>$(ProjectDir)\Build\$(Configuration)\Intermediate</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_DLL_GUI|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>CURL_STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\Hawt Strokes\Dev\School\New\AirlineReservationSystem\External\curl\builds\libcurl-vc22-x64-release-static-ipv6-sspi-schannel\include;D:\Hawt Strokes\Dev\School\New\AirlineReservationSystem\External\curl\builds\libcurl-vc-x86-release-static-ipv6-sspi-schannel\include;$(SolutionDir)\External\imgui\backends;$(SolutionDir)\External\imgui;%VULKAN_SDK%\Include;$(SolutionDir)\External\fmt\include;$(SolutionDir)\External\glfw\include;$(SolutionDir)\External\HawtLib\HawtLib\Build\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>Default</LanguageStandard_C>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>D:\Hawt Strokes\Dev\School\New\AirlineReservationSystem\External\curl\builds\libcurl-vc22-x64-release-static-ipv6-sspi-schannel\lib;%VULKAN_SDK%\Lib;$(SolutionDir)\External\glfw\build\src\Release;$(SolutionDir)\External\HawtLib\HawtLib\Build\Release_DLL\Output;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;glfw3.lib;HawtLib.lib;libcurl_a.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_DLL_GUI|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;CURL_STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\Hawt Strokes\Dev\School\New\AirlineReservationSystem\External\json\include;D:\Hawt Strokes\Dev\School\New\AirlineReservationSystem\External\curl\builds\libcurl-vc22-x64-debug-static-ipv6-sspi-schannel\include;$(SolutionDir)\\External\\curl\\builds\\libcurl-vc-x86-release-static-ipv6-sspi-schannell\\include;$(SolutionDir)\External\imgui\backends;$(SolutionDir)\External\imgui;%VULKAN_SDK%\Include;$(SolutionDir)\External\fmt\include;$(SolutionDir)\External\glfw\include;$(SolutionDir)\External\HawtLib\HawtLib\Build\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>Default</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>D:\Hawt Strokes\Dev\School\New\AirlineReservationSystem\External\curl\builds\libcurl-vc22-x64-debug-static-ipv6-sspi-schannel\lib;%VULKAN_SDK%\Lib;$(SolutionDir)\External\glfw\build\src\Debug;$(SolutionDir)\\External\\curl\\builds\\libcurl-vc-x86-release-static-ipv6-sspi-schannell\\lib;$(SolutionDir)\External\HawtLib\HawtLib\Build\Debug_DLL\Output;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libcurl_a_debug.lib;vulkan-1.lib;glfw3.lib;HawtLib.lib;Ws2_32.Lib;Wldap32.Lib;Normaliz.lib;Crypt32.Lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
