@@ -1,7 +1,7 @@
 ## AirlineReservationSystem
 Simple Airline Reservation System with GUI and NoSQL Database support.
 
-<img src="https://github.com/HawtStrokes/AirlineReservationSystem/blob/main/Resources/SampleImage.png" width=90% height=90%>
+<img src="https://github.com/HawtStrokes/AirlineReservationSystem/blob/master/Resources/SampleImage.png" width=90% height=90%>
 
 ## **Build**
 
