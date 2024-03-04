@@ -1,5 +1,5 @@
 ## AirlineReservationSystem
-Simple Airline Reservation System with GUI and NoSQL Database support.
+Simple Airline Reservation System with GUI and JSON support.
 
 <img src="https://github.com/HawtStrokes/AirlineReservationSystem/blob/master/Resources/SampleImage.png" width=90% height=90%>
 
