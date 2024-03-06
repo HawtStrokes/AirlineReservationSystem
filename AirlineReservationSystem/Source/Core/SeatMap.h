@@ -58,6 +58,7 @@ namespace AirlineReservationSystem
         }
 
     public:
+        SeatMap() : m_Rows(0), m_Cols(0) {}
         SeatMap(int rows, int cols) : m_Rows(rows), m_Cols(cols)
         {
             // Initialize the seat map with available seats

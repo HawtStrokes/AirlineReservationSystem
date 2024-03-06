@@ -9,7 +9,7 @@ namespace AirlineReservationSystem
     class Flight
     {
     private:
-        std::string m_FlightNumber;
+        std::string m_FlightID;
         std::string m_Destination;
         SeatMap m_SeatMap;
 
@@ -25,9 +25,23 @@ namespace AirlineReservationSystem
             m_SeatMap.LoadFromJSON(filename);
         }
 
+        std::string GenerateSeatCode(unsigned short row, unsigned short col)
+        {
+            std::string lHandCode;
+            unsigned short procRow = row + 65;
+            while (procRow > 90)
+            {
+                lHandCode += 'Z';
+                procRow - 26;
+            }
+            lHandCode += static_cast<char>(procRow);
+            return lHandCode + std::to_string(col);
+        }
+
     public:
-        Flight(const std::string& flightNumber, const std::string& destination, int rows, int cols)
-            : m_FlightNumber(flightNumber), m_Destination(destination), m_SeatMap(rows, cols)
+        Flight() : m_FlightID(""), m_Destination(""), m_SeatMap() {}
+        Flight(const std::string& flightID, const std::string& destination, int rows, int cols)
+            : m_FlightID(flightID), m_Destination(destination), m_SeatMap(rows, cols)
         {
         }
 
@@ -44,7 +58,7 @@ namespace AirlineReservationSystem
 
         void DisplayInfo() const
         {
-            std::cout << "Flight " << m_FlightNumber << " to " << m_Destination << std::endl;
+            std::cout << "Flight " << m_FlightID << " to " << m_Destination << std::endl;
             m_SeatMap.DisplaySeatMap();
         }
 
@@ -56,7 +70,7 @@ namespace AirlineReservationSystem
     public:
         std::string GetFlightNumber() const
         {
-            return m_FlightNumber;
+            return m_FlightID;
         }
         std::string GetDestination() const
         {
