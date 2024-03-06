@@ -37,3 +37,4 @@ In file explorer, go to the following directories and open the appropriate batch
 - https://github.com/fmtlib/fmt
 - https://github.com/HawtStrokes/HawtLib
 - https://github.com/nlohmann/json
+- https://github.com/AirGuanZ/imgui-filebrowser
