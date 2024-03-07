@@ -18,7 +18,7 @@ namespace AirlineReservationSystem
 	static const std::filesystem::path flightPath = std::filesystem::current_path().append("flights");
 	
 	static bool showAbout = false;
-	static bool showHelp = false;
+	// static bool showHelp = false;
 	static SeatMap* activeSeatMap = nullptr;
 	static Flight* activeFlight = nullptr;
 
@@ -29,7 +29,6 @@ namespace AirlineReservationSystem
 	static ImGuiTextBuffer g_LogBuf;
 	// static std::vector<Flight*> g_Flights;
 	static std::string flightId = "No Flight Selected";
-	static char passengerBuffer[512];
 
 	namespace GUIComponents
 	{
@@ -40,13 +39,15 @@ namespace AirlineReservationSystem
 			ImGui::TextWrapped("AirlineReservationSystem v0.1a");
 			ImGui::End();
 		}
-		static void Help()
-		{
-			ImGui::Begin("Help", &showHelp);
-			// TODO: Provide Wiki page clipboard?
-			ImGui::TextWrapped("Sample Text");
-			ImGui::End();
-		}
+		//static void Help()
+		//{
+		//	ImGui::Begin("Help", &showHelp);
+		//	// TODO: Provide Wiki page clipboard?
+		//	ImGui::TextWrapped("Seat Map Gui offers a graphical representation of the airplane's seatmap");
+		//	ImGui::TextWrapped("Update or Delete bookings via Manage Bookings");
+		//	ImGui::TextWrapped("");
+		//	ImGui::End();
+		//}
 
 
 		// CORE GUI
@@ -101,18 +102,19 @@ namespace AirlineReservationSystem
 			{
 				fileDialog.Open();
 			}
-			if (ImGui::Button("Select", ImVec2(g_WindowDimensions.x - 30, 50)))
-			{
-				delete activeFlight;
-				activeFlight = new Flight("", "", 0, 0);
-				activeFlight->LoadFromJSON(fileDialog.GetSelected().string());
-				activeSeatMap = &activeFlight->GetSeatMap();
-			}
 			if (fileDialog.HasSelected())
 			{
 				std::string str = fileDialog.GetSelected().filename().string();
-				std::size_t pos = str.find(".json");      // position of "live" in str
-				flightId = str.substr(0, pos);     // get from "live" to the end)
+				std::size_t pos = str.find(".json");      // position of ".json" in str
+				flightId = str.substr(0, pos);
+			}
+			if (ImGui::Button("Select", ImVec2(g_WindowDimensions.x - 30, 50)))
+			{
+				delete activeFlight;
+				activeFlight = new Flight(flightId, "", 0, 0);
+				activeFlight->LoadFromJSON(fileDialog.GetSelected().string());
+				activeSeatMap = &activeFlight->GetSeatMap();
+				g_LogBuf.appendf("Flight Selected: %s\n", flightId.c_str());
 			}
 			ImGui::End();
 		}
@@ -127,22 +129,33 @@ namespace AirlineReservationSystem
 				ImGui::Text("(Row, Col): (%s, %s)", std::to_string(g_SelectedRowCol.row).c_str(), std::to_string(g_SelectedRowCol.col).c_str());
 				if (!activeSeatMap->IsSeatAvailable(g_SelectedRowCol.row, g_SelectedRowCol.col))
 				{
+					static char passengerBuffer[512];
+					static char emailBuffer[512];
+					static char maxLoadBuffer[512];
 					ImGui::Separator();
 					ImGui::Text("Seat Information:");
 					// strcpy_s(passengerBuffer, activeFlight->GetPassengerName(g_SelectedRowCol.row, g_SelectedRowCol.col).c_str());
 					ImGui::Text("Passenger Name: %s", activeFlight->GetPassengerName(g_SelectedRowCol.row, g_SelectedRowCol.col).c_str());
 					ImGui::InputText("Update Passenger Name", passengerBuffer, 512);
+
+					ImGui::Text("Email Address: %s", activeFlight->GetEmail(g_SelectedRowCol.row, g_SelectedRowCol.col).c_str());
+					ImGui::InputText("Update Email Address", emailBuffer, 512);
+
+					ImGui::Text("Max Load: %s", activeFlight->GetMaxLoad(g_SelectedRowCol.row, g_SelectedRowCol.col).c_str());
+					ImGui::InputText("Update Passenger Max Load", maxLoadBuffer, 512);
 					if (ImGui::Button("Update"))
 					{
-						std::cout << passengerBuffer;
+						// std::cout << passengerBuffer;
 						activeFlight->CancelBooking(g_SelectedRowCol.row, g_SelectedRowCol.col);
-						activeFlight->BookSeat(g_SelectedRowCol.row, g_SelectedRowCol.col, std::string(passengerBuffer));
+						activeFlight->BookSeat(g_SelectedRowCol.row, g_SelectedRowCol.col, passengerBuffer, emailBuffer, maxLoadBuffer);
 						activeFlight->SaveToJSON(flightPath.string() + "\\" + (activeFlight->GetFlightNumber() + ".json"));
+						g_LogBuf.appendf("Booking Updated!\nPassenger Name: %s\n(Row, Col): (%s, %s)\n", passengerBuffer, std::to_string(g_SelectedRowCol.row).c_str(), std::to_string(g_SelectedRowCol.col).c_str()); // Add Exception Handling
 					}
 					if (ImGui::Button("Delete"))
 					{
 						activeFlight->CancelBooking(g_SelectedRowCol.row, g_SelectedRowCol.col);;
 						activeFlight->SaveToJSON(flightPath.string() + "\\" + (activeFlight->GetFlightNumber() + ".json"));
+						g_LogBuf.appendf("Booking Deleted!\n", passengerBuffer, std::to_string(g_SelectedRowCol.row).c_str(), std::to_string(g_SelectedRowCol.col).c_str()); // Add Exception Handling
 					}
 				}				
 				else
@@ -167,20 +180,26 @@ namespace AirlineReservationSystem
 			{
 				static char nameBuffer[512];
 				ImGui::InputText("Passenger Name", nameBuffer, sizeof(nameBuffer));
+				//ImGui::Text("(Row, Col): (%s, %s)", std::to_string(g_SelectedRowCol.row).c_str(), std::to_string(g_SelectedRowCol.col).c_str());
+				static char emailBuffer[512];
+				ImGui::InputText("Email Address", emailBuffer, sizeof(emailBuffer));
+				//ImGui::Text("(Row, Col): (%s, %s)", std::to_string(g_SelectedRowCol.row).c_str(), std::to_string(g_SelectedRowCol.col).c_str());
+				static char maxLoadBuffer[512];
+				ImGui::InputText("Max Load", maxLoadBuffer, sizeof(maxLoadBuffer));
 				ImGui::Text("(Row, Col): (%s, %s)", std::to_string(g_SelectedRowCol.row).c_str(), std::to_string(g_SelectedRowCol.col).c_str());
 
 				if (ImGui::Button("Book"))
 				{
-					if (activeFlight->BookSeat(g_SelectedRowCol.row, g_SelectedRowCol.col, nameBuffer))
+					if (activeFlight->BookSeat(g_SelectedRowCol.row, g_SelectedRowCol.col, nameBuffer, emailBuffer, maxLoadBuffer))
 					{
 						// Valid
-						g_LogBuf.appendf("BOOKED!\nPassenger Name: %s\n(Row, Col): (%s, %s)\n", nameBuffer, std::to_string(g_SelectedRowCol.row).c_str(), std::to_string(g_SelectedRowCol.col).c_str()); // Add Exception Handling
 						activeFlight->SaveToJSON(flightPath.string() + "\\" + (activeFlight->GetFlightNumber() + ".json"));
+						g_LogBuf.appendf("Booking Created!\nPassenger Name: %s\n(Row, Col): (%s, %s)\n", nameBuffer, std::to_string(g_SelectedRowCol.row).c_str(), std::to_string(g_SelectedRowCol.col).c_str()); // Add Exception Handling
 					}
 					else
 					{
 						// Invalid
-						g_LogBuf.appendf("ERROR BOOKING!\nCheck if seat is available.\n", nameBuffer, g_SelectedRowCol.row, g_SelectedRowCol.col); // Add Exception Handling
+						g_LogBuf.appendf("Error Booking!\nCheck if seat is available.\n", nameBuffer, g_SelectedRowCol.row, g_SelectedRowCol.col); // Add Exception Handling
 					}
 
 				}
@@ -214,14 +233,14 @@ namespace AirlineReservationSystem
 				}
 				ImGui::EndMenu();
 			}
-			if (ImGui::BeginMenu("Help"))
+		/*	if (ImGui::BeginMenu("Help"))
 			{
 				if (ImGui::MenuItem("View Help"))
 				{
 					showHelp = true;
 				}
 				ImGui::EndMenu();
-			}
+			}*/
 			ImGui::EndMenuBar();
 		}
 		if (activeFlight != nullptr) 
@@ -262,11 +281,11 @@ namespace AirlineReservationSystem
 			GUIComponents::About();
 		}
 
-	/*	if (showHelp)
-		{
-			ImGui::SetNextWindowDockID(ImGui::GetID("Persistence"), ImGuiCond_FirstUseEver | ImGuiConfigFlags_DockingEnable);
-			GUIComponents::Help();
-		}*/
+		//if (showHelp)
+		//{
+		//	ImGui::SetNextWindowDockID(ImGui::GetID("Persistence"), ImGuiCond_FirstUseEver | ImGuiConfigFlags_DockingEnable);
+		//	GUIComponents::Help();
+		//}
 
 		ImGui::End();
 	}

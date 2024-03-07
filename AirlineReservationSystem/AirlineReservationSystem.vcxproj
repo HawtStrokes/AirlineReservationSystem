@@ -75,7 +75,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>CURL_STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Hawt Strokes\Dev\School\New\AirlineReservationSystem\External\curl\builds\libcurl-vc22-x64-release-static-ipv6-sspi-schannel\include;D:\Hawt Strokes\Dev\School\New\AirlineReservationSystem\External\curl\builds\libcurl-vc-x86-release-static-ipv6-sspi-schannel\include;$(SolutionDir)\External\imgui\backends;$(SolutionDir)\External\imgui;%VULKAN_SDK%\Include;$(SolutionDir)\External\fmt\include;$(SolutionDir)\External\glfw\include;$(SolutionDir)\External\HawtLib\HawtLib\Build\Includes;%(AdditionalIncludeDirectories);D:\Hawt Strokes\Dev\School\New\AirlineReservationSystem\External\imgui-filebrowser</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Hawt Strokes\Dev\School\New\AirlineReservationSystem\External\json\include;D:\Hawt Strokes\Dev\School\New\AirlineReservationSystem\External\curl\builds\libcurl-vc22-x64-release-static-ipv6-sspi-schannel\include;D:\Hawt Strokes\Dev\School\New\AirlineReservationSystem\External\curl\builds\libcurl-vc-x86-release-static-ipv6-sspi-schannel\include;$(SolutionDir)\External\imgui\backends;$(SolutionDir)\External\imgui;%VULKAN_SDK%\Include;$(SolutionDir)\External\fmt\include;$(SolutionDir)\External\glfw\include;$(SolutionDir)\External\HawtLib\HawtLib\Build\Includes;%(AdditionalIncludeDirectories);D:\Hawt Strokes\Dev\School\New\AirlineReservationSystem\External\imgui-filebrowser</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>Default</LanguageStandard_C>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>

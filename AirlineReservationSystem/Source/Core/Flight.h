@@ -46,9 +46,9 @@ namespace AirlineReservationSystem
         }
 
     public:
-        bool BookSeat(int row, int col, const std::string& passengerName)
+        bool BookSeat(int row, int col, const std::string& passengerName, const std::string& email, const std::string& maxLoad)
         {
-            return m_SeatMap.BookSeat(row, col, passengerName);
+            return m_SeatMap.BookSeat(row, col, passengerName, email, maxLoad);
         }
 
         void CancelBooking(int row, int col)
@@ -65,6 +65,16 @@ namespace AirlineReservationSystem
         std::string GetPassengerName(int row, int col) const
         {
             return m_SeatMap.GetPassengerName(row, col);
+        }
+
+        std::string GetEmail(int row, int col) const
+        {
+            return m_SeatMap.GetEmail(row, col);
+        }
+
+        std::string GetMaxLoad(int row, int col) const
+        {
+            return m_SeatMap.GetMaxLoad(row, col);
         }
 
     public:

@@ -14,6 +14,16 @@ namespace AirlineReservationSystem
 
     class SeatMap
     {
+    private:
+        int m_Rows;
+        int m_Cols;
+        std::vector<std::vector<bool>> m_SeatMap;
+
+        // Todo: Convert to a struct with appropriate data
+        std::vector<std::vector<std::string>> m_PassengerMap;
+        std::vector<std::vector<std::string>> m_EmailMap;
+        std::vector<std::vector<std::string>> m_MaxLoadMap;
+
     public:
         // TODO Move Persistence implementation to Persistence Manager Class and use friend
         void SaveToJSON(const std::string& filename) const
@@ -23,6 +33,8 @@ namespace AirlineReservationSystem
             data["cols"] = m_Cols;
             data["seatMap"] = m_SeatMap;
             data["passengerMap"] = m_PassengerMap;
+            data["emailMap"] = m_EmailMap;
+            data["maxLoadMap"] = m_MaxLoadMap;
 
             std::ofstream file(filename);
             if (file.is_open())
@@ -48,6 +60,8 @@ namespace AirlineReservationSystem
                 m_Cols = data["cols"];
                 m_SeatMap = data["seatMap"];
                 m_PassengerMap = data["passengerMap"];
+                m_EmailMap = data["emailMap"];
+                m_MaxLoadMap = data["maxLoadMap"];
 
                 std::cout << "Booking information loaded from " << filename << std::endl;
             }
@@ -64,6 +78,8 @@ namespace AirlineReservationSystem
             // Initialize the seat map with available seats
             m_SeatMap.resize(m_Rows, std::vector<bool>(m_Cols, true));
             m_PassengerMap.resize(m_Rows, std::vector<std::string>(m_Cols));
+            m_EmailMap.resize(m_Rows, std::vector<std::string>(m_Cols));
+            m_MaxLoadMap.resize(m_Rows, std::vector<std::string>(m_Cols));
         }
 
         bool IsSeatAvailable(int row, int col) const
@@ -75,12 +91,14 @@ namespace AirlineReservationSystem
             return false; // Invalid seat
         }
 
-        bool BookSeat(int row, int col, const std::string& passengerName)
+        bool BookSeat(int row, int col, const std::string& passengerName, const std::string& email, const std::string& maxLoad)
         {
             if (IsSeatAvailable(row, col))
             {
                 m_SeatMap[row][col] = false; // Mark seat as booked
                 m_PassengerMap[row][col] = passengerName;
+                m_EmailMap[row][col] = email;
+                m_MaxLoadMap[row][col] = maxLoad;
                 return true;
             }
             return false; // Seat not available or invalid
@@ -92,6 +110,8 @@ namespace AirlineReservationSystem
             {
                 m_SeatMap[row][col] = true; // Mark seat as available
                 m_PassengerMap[row][col].clear();
+                m_EmailMap[row][col].clear();
+                m_MaxLoadMap[row][col].clear();
             }
         }
 
@@ -100,6 +120,24 @@ namespace AirlineReservationSystem
             if (row >= 0 && row < m_Rows && col >= 0 && col < m_Cols)
             {
                 return m_PassengerMap[row][col];
+            }
+            return ""; // Invalid seat
+        }
+
+        std::string GetMaxLoad(int row, int col) const
+        {
+            if (row >= 0 && row < m_Rows && col >= 0 && col < m_Cols)
+            {
+                return m_MaxLoadMap[row][col];
+            }
+            return "";   // Invalid Seat
+        }
+
+        std::string GetEmail(int row, int col) const
+        {
+            if (row >= 0 && row < m_Rows && col >= 0 && col < m_Cols)
+            {
+                return m_EmailMap[row][col];
             }
             return ""; // Invalid seat
         }
@@ -135,10 +173,5 @@ namespace AirlineReservationSystem
             return m_PassengerMap;
         }
 
-    private:
-        int m_Rows;
-        int m_Cols;
-        std::vector<std::vector<bool>> m_SeatMap;
-        std::vector<std::vector<std::string>> m_PassengerMap;
     };
 }
