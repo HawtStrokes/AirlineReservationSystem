@@ -1,94 +1,60 @@
 #pragma once
 #include <string>
-#include <iostream>
+// #include <iostream>
 
 #include "SeatMap.h"
 
 namespace AirlineReservationSystem
 {
+    class PersistenceManager;
+    struct FlightInformation;
+
     class Flight
     {
     private:
         std::string m_FlightID;
+        std::string m_Origin;
         std::string m_Destination;
+        int m_DepartureTime;
+        int m_ArrivalTime;
         SeatMap m_SeatMap;
 
     public:
         // TODO Move Persistence implementation to Persistence Manager Class and use friend
-        void SaveToJSON(const std::string& filename) const
-        {
-            m_SeatMap.SaveToJSON(filename);
-        }
+        void SaveToJSON(const std::string& filename) const;
 
-        void LoadFromJSON(const std::string& filename)
-        {
-            m_SeatMap.LoadFromJSON(filename);
-        }
+        void LoadFromJSON(const std::string& filename);
 
-        std::string GenerateSeatCode(unsigned short row, unsigned short col)
-        {
-            std::string lHandCode;
-            unsigned short procRow = row + 65;
-            while (procRow > 90)
-            {
-                lHandCode += 'Z';
-                procRow - 26;
-            }
-            lHandCode += static_cast<char>(procRow);
-            return lHandCode + std::to_string(col);
-        }
+        void LoadFromFlightInformation(const SQLite::Database& db, const FlightInformation& flightInfo);
+
+        std::string GenerateSeatCode(unsigned short row, unsigned short col);
+
+
+        friend PersistenceManager;
 
     public:
-        Flight() : m_FlightID(""), m_Destination(""), m_SeatMap() {}
-        Flight(const std::string& flightID, const std::string& destination, int rows, int cols)
-            : m_FlightID(flightID), m_Destination(destination), m_SeatMap(rows, cols)
-        {
-        }
+        Flight() = delete;
+        /*Flight(std::string flightID, std::string origin, std::string destination,
+            int departureTime, int arrivalTime, int rows, int cols);*/
+        Flight(const std::string& flightID, const std::string& origin, const std::string& destination,
+               int departureTime,
+               int arrivalTime, int rows, int cols);
+    public:
+        bool BookSeat(int row, int col, const std::string& passengerName, const std::string& email, const std::string& maxLoad);
+
+        void CancelBooking(int row, int col);
+
+        void DisplayInfo() const;
+
+        std::string GetPassengerName(int row, int col) const;
+
+        std::string GetEmail(int row, int col) const;
+
+        std::string GetMaxLoad(int row, int col) const;
 
     public:
-        bool BookSeat(int row, int col, const std::string& passengerName, const std::string& email, const std::string& maxLoad)
-        {
-            return m_SeatMap.BookSeat(row, col, passengerName, email, maxLoad);
-        }
-
-        void CancelBooking(int row, int col)
-        {
-            m_SeatMap.CancelBooking(row, col);
-        }
-
-        void DisplayInfo() const
-        {
-            std::cout << "Flight " << m_FlightID << " to " << m_Destination << std::endl;
-            m_SeatMap.DisplaySeatMap();
-        }
-
-        std::string GetPassengerName(int row, int col) const
-        {
-            return m_SeatMap.GetPassengerName(row, col);
-        }
-
-        std::string GetEmail(int row, int col) const
-        {
-            return m_SeatMap.GetEmail(row, col);
-        }
-
-        std::string GetMaxLoad(int row, int col) const
-        {
-            return m_SeatMap.GetMaxLoad(row, col);
-        }
-
-    public:
-        std::string GetFlightNumber() const
-        {
-            return m_FlightID;
-        }
-        std::string GetDestination() const
-        {
-            return m_Destination;
-        }
-        SeatMap& GetSeatMap()
-        {
-            return m_SeatMap;
-        }
+        std::string GetFlightID() const;
+        std::string GetDestination() const;
+        SeatMap& GetSeatMap();
     };
 }
